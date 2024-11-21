@@ -6,20 +6,24 @@ option go_package = "tesuto/proto/v1/user;userv1";
 service User {
   rpc GetUserByEmail(GetUserByEmailReq) returns (GetUserByEmailRep);
 
-  rpc InsertUser(InsertUserReq) returns (InsertUserRep);
+  rpc addUser(addUserReq) returns (addUserRep);
 }
 
-message InsertUserReq {
-
+message addUserReq {
+  string email = 1;
+  string username = 2;
+  string passwd = 3;
+  string confirmPasswd = 4 ;
 }
-message InsertUserRep {
-
+message addUserRep {
 }
 
 message GetUserByEmailReq {
   string email = 1;
 }
 message GetUserByEmailRep {
-
+  int64 id = 1;
+  string username = 2;
+  string email = 3;
 }
 

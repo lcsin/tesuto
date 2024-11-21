@@ -20,7 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	User_GetUserByEmail_FullMethodName = "/userv1.User/GetUserByEmail"
-	User_InsertUser_FullMethodName     = "/userv1.User/InsertUser"
+	User_AddUser_FullMethodName        = "/userv1.User/addUser"
 )
 
 // UserClient is the client API for User service.
@@ -28,7 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
 	GetUserByEmail(ctx context.Context, in *GetUserByEmailReq, opts ...grpc.CallOption) (*GetUserByEmailRep, error)
-	InsertUser(ctx context.Context, in *InsertUserReq, opts ...grpc.CallOption) (*InsertUserRep, error)
+	AddUser(ctx context.Context, in *AddUserReq, opts ...grpc.CallOption) (*AddUserRep, error)
 }
 
 type userClient struct {
@@ -49,10 +49,10 @@ func (c *userClient) GetUserByEmail(ctx context.Context, in *GetUserByEmailReq, 
 	return out, nil
 }
 
-func (c *userClient) InsertUser(ctx context.Context, in *InsertUserReq, opts ...grpc.CallOption) (*InsertUserRep, error) {
+func (c *userClient) AddUser(ctx context.Context, in *AddUserReq, opts ...grpc.CallOption) (*AddUserRep, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(InsertUserRep)
-	err := c.cc.Invoke(ctx, User_InsertUser_FullMethodName, in, out, cOpts...)
+	out := new(AddUserRep)
+	err := c.cc.Invoke(ctx, User_AddUser_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func (c *userClient) InsertUser(ctx context.Context, in *InsertUserReq, opts ...
 // for forward compatibility.
 type UserServer interface {
 	GetUserByEmail(context.Context, *GetUserByEmailReq) (*GetUserByEmailRep, error)
-	InsertUser(context.Context, *InsertUserReq) (*InsertUserRep, error)
+	AddUser(context.Context, *AddUserReq) (*AddUserRep, error)
 	mustEmbedUnimplementedUserServer()
 }
 
@@ -78,8 +78,8 @@ type UnimplementedUserServer struct{}
 func (UnimplementedUserServer) GetUserByEmail(context.Context, *GetUserByEmailReq) (*GetUserByEmailRep, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserByEmail not implemented")
 }
-func (UnimplementedUserServer) InsertUser(context.Context, *InsertUserReq) (*InsertUserRep, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method InsertUser not implemented")
+func (UnimplementedUserServer) AddUser(context.Context, *AddUserReq) (*AddUserRep, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddUser not implemented")
 }
 func (UnimplementedUserServer) mustEmbedUnimplementedUserServer() {}
 func (UnimplementedUserServer) testEmbeddedByValue()              {}
@@ -120,20 +120,20 @@ func _User_GetUserByEmail_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
-func _User_InsertUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(InsertUserReq)
+func _User_AddUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddUserReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).InsertUser(ctx, in)
+		return srv.(UserServer).AddUser(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: User_InsertUser_FullMethodName,
+		FullMethod: User_AddUser_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).InsertUser(ctx, req.(*InsertUserReq))
+		return srv.(UserServer).AddUser(ctx, req.(*AddUserReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -150,8 +150,8 @@ var User_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _User_GetUserByEmail_Handler,
 		},
 		{
-			MethodName: "InsertUser",
-			Handler:    _User_InsertUser_Handler,
+			MethodName: "addUser",
+			Handler:    _User_AddUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
