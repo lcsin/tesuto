@@ -1,0 +1,9 @@
+app:
+  name: tesuto-user
+  port: 8081
+mysql:
+  dns: root:root@tcp(192.168.193.240:3306)/tesuto?charset=utf8mb4&parseTime=True&loc=Local"
+jwt:
+  key: 9f16436dd1f5d179802b69996e6ab34d
+
+

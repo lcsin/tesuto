@@ -1,0 +1,17 @@
+version: v1
+managed:
+  enabled: true
+plugins:
+  # 默认使用最新版本的protoc-gen-go插件
+  - plugin: buf.build/protocolbuffers/go
+    # 输出目录
+    out: proto/v1/rpc
+    # 可选参数
+    opt:
+      - paths=source_relative
+
+  # 默认使用最新版本的protoc-gen-go-grpc插件
+  - plugin: buf.build/grpc/go
+    out: proto/v1/rpc
+    opt:
+      - paths=source_relative

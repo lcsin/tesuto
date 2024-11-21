@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package userv1;
+option go_package = "tesuto/proto/v1/user;userv1";
+
+service User {
+  rpc SelectUserByEmail(SelectUserByEmailReq) returns (SelectUserByEmailRep);
+
+  rpc InsertUser(InsertUserReq) returns (InsertUserRep);
+}
+
+message InsertUserReq {
+
+}
+message InsertUserRep {
+
+}
+
+message SelectUserByEmailReq {
+  string email = 1;
+}
+message SelectUserByEmailRep {
+  
+}
+
