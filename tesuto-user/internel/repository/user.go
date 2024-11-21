@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 
-	"github.com/lcsin/tesuto/user/internel/repository/dao"
-	"github.com/lcsin/tesuto/user/internel/repository/model"
+	"github.com/lcsin/tesuto/tesuto-user/internel/repository/dao"
+	"github.com/lcsin/tesuto/tesuto-user/internel/repository/model"
 )
 
 type IUserRepository interface {

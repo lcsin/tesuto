@@ -2,12 +2,13 @@ package service
 
 import (
 	"context"
-	"fmt"
 	"time"
 
-	"github.com/lcsin/tesuto/user/internel/domain"
-	"github.com/lcsin/tesuto/user/internel/repository"
-	"github.com/lcsin/tesuto/user/internel/repository/model"
+	"github.com/lcsin/tesuto/pkg/errcode"
+	"github.com/lcsin/tesuto/pkg/response"
+	"github.com/lcsin/tesuto/tesuto-user/internel/domain"
+	"github.com/lcsin/tesuto/tesuto-user/internel/repository"
+	"github.com/lcsin/tesuto/tesuto-user/internel/repository/model"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -27,12 +28,12 @@ func NewUserService(repo repository.IUserRepository) IUserService {
 
 func (u *UserService) GetUserByEmail(ctx context.Context, email string) (*domain.User, error) {
 	if len(email) == 0 {
-		return nil, fmt.Errorf("参数错误")
+		return nil, response.Failed(errcode.EmailIsEmpty)
 	}
 
 	user, err := u.repo.GetUserByEmail(ctx, email)
 	if err != nil {
-		return nil, err
+		return nil, response.Failed(errcode.UNKnownError)
 	}
 
 	return &domain.User{
@@ -44,24 +45,24 @@ func (u *UserService) GetUserByEmail(ctx context.Context, email string) (*domain
 
 func (u *UserService) AddUser(ctx context.Context, email, username, passwd, confirmPasswd string) error {
 	if passwd != confirmPasswd {
-		return fmt.Errorf("两次输入的密码不一致")
+		return response.Failed(errcode.PasswordInconsistency)
 	}
 	if len(email) == 0 {
-		return fmt.Errorf("参数无效")
+		return response.Failed(errcode.EmailIsEmpty)
 	}
 
 	user, err := u.repo.GetUserByEmail(ctx, email)
 	if err != nil {
-		return err
+		return response.Failed(errcode.UNKnownError)
 	}
 	if user.ID > 0 {
-		return fmt.Errorf("邮箱已被注册")
+		return response.Failed(errcode.EmailAlreadyRegistered)
 	}
 
 	// 密码加密
 	hash, err := bcrypt.GenerateFromPassword([]byte(passwd), bcrypt.DefaultCost)
 	if err != nil {
-		return err
+		return response.Failed(errcode.UNKnownError)
 	}
 
 	return u.repo.AddUser(ctx, &model.User{

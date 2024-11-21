@@ -19,15 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	User_SelectUserByEmail_FullMethodName = "/userv1.User/SelectUserByEmail"
-	User_InsertUser_FullMethodName        = "/userv1.User/InsertUser"
+	User_GetUserByEmail_FullMethodName = "/userv1.User/GetUserByEmail"
+	User_InsertUser_FullMethodName     = "/userv1.User/InsertUser"
 )
 
 // UserClient is the client API for User service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type UserClient interface {
-	SelectUserByEmail(ctx context.Context, in *SelectUserByEmailReq, opts ...grpc.CallOption) (*SelectUserByEmailRep, error)
+	GetUserByEmail(ctx context.Context, in *GetUserByEmailReq, opts ...grpc.CallOption) (*GetUserByEmailRep, error)
 	InsertUser(ctx context.Context, in *InsertUserReq, opts ...grpc.CallOption) (*InsertUserRep, error)
 }
 
@@ -39,10 +39,10 @@ func NewUserClient(cc grpc.ClientConnInterface) UserClient {
 	return &userClient{cc}
 }
 
-func (c *userClient) SelectUserByEmail(ctx context.Context, in *SelectUserByEmailReq, opts ...grpc.CallOption) (*SelectUserByEmailRep, error) {
+func (c *userClient) GetUserByEmail(ctx context.Context, in *GetUserByEmailReq, opts ...grpc.CallOption) (*GetUserByEmailRep, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(SelectUserByEmailRep)
-	err := c.cc.Invoke(ctx, User_SelectUserByEmail_FullMethodName, in, out, cOpts...)
+	out := new(GetUserByEmailRep)
+	err := c.cc.Invoke(ctx, User_GetUserByEmail_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +63,7 @@ func (c *userClient) InsertUser(ctx context.Context, in *InsertUserReq, opts ...
 // All implementations must embed UnimplementedUserServer
 // for forward compatibility.
 type UserServer interface {
-	SelectUserByEmail(context.Context, *SelectUserByEmailReq) (*SelectUserByEmailRep, error)
+	GetUserByEmail(context.Context, *GetUserByEmailReq) (*GetUserByEmailRep, error)
 	InsertUser(context.Context, *InsertUserReq) (*InsertUserRep, error)
 	mustEmbedUnimplementedUserServer()
 }
@@ -75,8 +75,8 @@ type UserServer interface {
 // pointer dereference when methods are called.
 type UnimplementedUserServer struct{}
 
-func (UnimplementedUserServer) SelectUserByEmail(context.Context, *SelectUserByEmailReq) (*SelectUserByEmailRep, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SelectUserByEmail not implemented")
+func (UnimplementedUserServer) GetUserByEmail(context.Context, *GetUserByEmailReq) (*GetUserByEmailRep, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserByEmail not implemented")
 }
 func (UnimplementedUserServer) InsertUser(context.Context, *InsertUserReq) (*InsertUserRep, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method InsertUser not implemented")
@@ -102,20 +102,20 @@ func RegisterUserServer(s grpc.ServiceRegistrar, srv UserServer) {
 	s.RegisterService(&User_ServiceDesc, srv)
 }
 
-func _User_SelectUserByEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SelectUserByEmailReq)
+func _User_GetUserByEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserByEmailReq)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(UserServer).SelectUserByEmail(ctx, in)
+		return srv.(UserServer).GetUserByEmail(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: User_SelectUserByEmail_FullMethodName,
+		FullMethod: User_GetUserByEmail_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(UserServer).SelectUserByEmail(ctx, req.(*SelectUserByEmailReq))
+		return srv.(UserServer).GetUserByEmail(ctx, req.(*GetUserByEmailReq))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -146,8 +146,8 @@ var User_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "SelectUserByEmail",
-			Handler:    _User_SelectUserByEmail_Handler,
+			MethodName: "GetUserByEmail",
+			Handler:    _User_GetUserByEmail_Handler,
 		},
 		{
 			MethodName: "InsertUser",

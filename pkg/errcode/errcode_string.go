@@ -9,19 +9,34 @@ func _() {
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
 	_ = x[OK-0]
-	_ = x[InternalServer - -1]
+	_ = x[UNKnownError - -1]
 	_ = x[InvalidParam - -2]
 	_ = x[Unauthorized - -3]
+	_ = x[UserNotFound - -1001]
+	_ = x[EmailAlreadyRegistered - -1002]
+	_ = x[PasswordInconsistency - -1003]
+	_ = x[EmailIsEmpty - -1004]
 }
 
-const _ErrCode_name = "未授权参数无效unknown errorok"
+const (
+	_ErrCode_name_0 = "邮箱不能为空密码不一致邮箱已注册用户不存在或密码错误"
+	_ErrCode_name_1 = "未授权参数无效unknown errorok"
+)
 
-var _ErrCode_index = [...]uint8{0, 9, 21, 34, 36}
+var (
+	_ErrCode_index_0 = [...]uint8{0, 18, 33, 48, 78}
+	_ErrCode_index_1 = [...]uint8{0, 9, 21, 34, 36}
+)
 
 func (i ErrCode) String() string {
-	i -= -3
-	if i < 0 || i >= ErrCode(len(_ErrCode_index)-1) {
-		return "ErrCode(" + strconv.FormatInt(int64(i+-3), 10) + ")"
+	switch {
+	case -1004 <= i && i <= -1001:
+		i -= -1004
+		return _ErrCode_name_0[_ErrCode_index_0[i]:_ErrCode_index_0[i+1]]
+	case -3 <= i && i <= 0:
+		i -= -3
+		return _ErrCode_name_1[_ErrCode_index_1[i]:_ErrCode_index_1[i+1]]
+	default:
+		return "ErrCode(" + strconv.FormatInt(int64(i), 10) + ")"
 	}
-	return _ErrCode_name[_ErrCode_index[i]:_ErrCode_index[i+1]]
 }
