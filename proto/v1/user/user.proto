@@ -3,27 +3,44 @@ syntax = "proto3";
 package userv1;
 option go_package = "tesuto/proto/v1/user;userv1";
 
-service User {
-  rpc GetUserByEmail(GetUserByEmailReq) returns (GetUserByEmailRep);
+import "common/common.proto";
 
-  rpc addUser(addUserReq) returns (addUserRep);
+service User {
+  // 用户登录
+  rpc Register (RegisterReq) returns (common.Empty);
+  // 用户注册
+  rpc Login (LoginReq) returns (LoginRep);
+  // 修改用户信息
+  rpc UpdateUserInfo (UpdateUserInfoReq) returns (common.Empty);
+  // 修改用户密码
+  rpc UpdateUserPasswd (UpdateUserPasswdReq) returns (common.Empty);
 }
 
-message addUserReq {
+message UpdateUserPasswdReq {
+  string email = 1;
+  string oldPasswd = 2;
+  string newPasswd = 3;
+}
+
+message UpdateUserInfoReq {
+  int64 id = 1;
+  string email = 2;
+  string username = 3;
+}
+
+message RegisterReq {
   string email = 1;
   string username = 2;
   string passwd = 3;
-  string confirmPasswd = 4 ;
-}
-message addUserRep {
+  string confirmPasswd = 4;
 }
 
-message GetUserByEmailReq {
+message LoginReq {
   string email = 1;
+  string passwd = 2;
 }
-message GetUserByEmailRep {
+message LoginRep {
   int64 id = 1;
-  string username = 2;
-  string email = 3;
+  string email = 2;
+  string username = 3;
 }
-

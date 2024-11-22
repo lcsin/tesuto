@@ -18,6 +18,7 @@ func InitGRPCXServer(userServer *rpc.UserServer) *grpcx.Server {
 	}
 
 	server := grpc.NewServer()
+	userServer.Register(server)
 
 	return &grpcx.Server{
 		Server: server,

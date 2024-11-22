@@ -5,6 +5,7 @@ import (
 
 	userv1 "github.com/lcsin/tesuto/proto/v1/rpc"
 	"github.com/lcsin/tesuto/tesuto-user/internel/service"
+	"google.golang.org/grpc"
 )
 
 type UserServer struct {
@@ -31,4 +32,8 @@ func (u *UserServer) AddUser(ctx context.Context, req *userv1.AddUserReq) (*user
 		return nil, err
 	}
 	return &userv1.AddUserRep{}, nil
+}
+
+func (u *UserServer) Register(server *grpc.Server) {
+	userv1.RegisterUserServer(server, u)
 }
