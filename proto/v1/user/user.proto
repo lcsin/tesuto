@@ -1,7 +1,7 @@
 syntax = "proto3";
 
-package userv1;
-option go_package = "tesuto/proto/v1/user;userv1";
+package user;
+option go_package = "rpc/user";
 
 import "common/common.proto";
 

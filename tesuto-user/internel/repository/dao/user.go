@@ -17,9 +17,9 @@ type IUserDAO interface {
 	SelectUserByEmailPasswd(ctx context.Context, email, passwd string) (*model.User, error)
 
 	// InsertUser 新增用户
-	InsertUser(ctx context.Context, user *model.User) error
+	InsertUser(ctx context.Context, user model.User) error
 	// UpdateUserInfo 更新用户信息
-	UpdateUserInfo(ctx context.Context, user *model.User) error
+	UpdateUserInfo(ctx context.Context, user model.User) error
 	// UpdateUserPasswd 修改用户密码
 	UpdateUserPasswd(ctx context.Context, uid int64, passwd string) error
 }
@@ -48,7 +48,7 @@ func (u *UserDAO) SelectUserByID(ctx context.Context, uid int64) (*model.User, e
 	return &user, nil
 }
 
-func (u *UserDAO) UpdateUserInfo(ctx context.Context, user *model.User) error {
+func (u *UserDAO) UpdateUserInfo(ctx context.Context, user model.User) error {
 	return u.db.Where("id = ?", user.ID).Updates(map[string]interface{}{
 		"email":      user.Email,
 		"username":   user.Username,
@@ -71,6 +71,6 @@ func (u *UserDAO) SelectUserByEmail(ctx context.Context, email string) (*model.U
 	return &user, nil
 }
 
-func (u *UserDAO) InsertUser(ctx context.Context, user *model.User) error {
+func (u *UserDAO) InsertUser(ctx context.Context, user model.User) error {
 	return u.db.Create(&user).Error
 }

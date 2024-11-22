@@ -16,9 +16,9 @@ type IUserRepository interface {
 	GetUserByEmailPasswd(ctx context.Context, email, passwd string) (*model.User, error)
 
 	// AddUser 新增用户
-	AddUser(ctx context.Context, user *model.User) error
+	AddUser(ctx context.Context, user model.User) error
 	// UpdateUserInfo 更新用户信息
-	UpdateUserInfo(ctx context.Context, user *model.User) error
+	UpdateUserInfo(ctx context.Context, user model.User) error
 	// UpdateUserPasswd 修改用户密码
 	UpdateUserPasswd(ctx context.Context, uid int64, passwd string) error
 }
@@ -39,7 +39,7 @@ func (u *UserRepository) GetUserByID(ctx context.Context, uid int64) (*model.Use
 	return u.dao.SelectUserByID(ctx, uid)
 }
 
-func (u *UserRepository) UpdateUserInfo(ctx context.Context, user *model.User) error {
+func (u *UserRepository) UpdateUserInfo(ctx context.Context, user model.User) error {
 	return u.dao.UpdateUserInfo(ctx, user)
 }
 
@@ -51,6 +51,6 @@ func (u *UserRepository) GetUserByEmail(ctx context.Context, email string) (*mod
 	return u.dao.SelectUserByEmail(ctx, email)
 }
 
-func (u *UserRepository) AddUser(ctx context.Context, user *model.User) error {
+func (u *UserRepository) AddUser(ctx context.Context, user model.User) error {
 	return u.dao.InsertUser(ctx, user)
 }

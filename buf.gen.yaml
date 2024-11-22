@@ -1,9 +1,14 @@
-version: v1
+version: v2
 managed:
   enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/lcsin/tesuto/proto/v1/rpc
+inputs:
+  - directory: proto/v1
 plugins:
   # 默认使用最新版本的protoc-gen-go插件
-  - plugin: buf.build/protocolbuffers/go
+  - remote: buf.build/protocolbuffers/go
     # 输出目录
     out: proto/v1/rpc
     # 可选参数
@@ -11,7 +16,7 @@ plugins:
       - paths=source_relative
 
   # 默认使用最新版本的protoc-gen-go-grpc插件
-  - plugin: buf.build/grpc/go
+  - remote: buf.build/grpc/go
     out: proto/v1/rpc
     opt:
       - paths=source_relative
