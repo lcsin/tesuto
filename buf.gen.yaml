@@ -1,22 +1,37 @@
+# 版本号
 version: v2
+# 是否让buf插件托管
 managed:
   enabled: true
+  # 重写grpc代码package前缀
   override:
     - file_option: go_package_prefix
       value: github.com/lcsin/tesuto/proto/v1/rpc
+# 输入文件目录
 inputs:
   - directory: proto/v1
+# 使用的protoc插件
 plugins:
-  # 默认使用最新版本的protoc-gen-go插件
-  - remote: buf.build/protocolbuffers/go
-    # 输出目录
+  - local: protoc-gen-go
     out: proto/v1/rpc
-    # 可选参数
     opt:
       - paths=source_relative
 
-  # 默认使用最新版本的protoc-gen-go-grpc插件
-  - remote: buf.build/grpc/go
+  - local: protoc-gen-go-grpc
     out: proto/v1/rpc
     opt:
       - paths=source_relative
+
+# 使用远程最新版本的protoc-gen-go插件
+#  - remote: buf.build/protocolbuffers/go
+#    # 输出目录
+#    out: proto/v1/rpc
+#    # 可选参数
+#    opt:
+#      - paths=source_relative
+
+# 使用远程最新版本的protoc-gen-go-grpc插件
+#  - remote: buf.build/grpc/go
+#    out: proto/v1/rpc
+#    opt:
+#      - paths=source_relative

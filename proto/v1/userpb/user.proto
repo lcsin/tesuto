@@ -1,11 +1,11 @@
 syntax = "proto3";
 
 package user;
-option go_package = "rpc/user";
+option go_package = "rpc/user;userpb";
 
-import "common/common.proto";
+import "commonpb/common.proto";
 
-service User {
+service UserService {
   // 用户登录
   rpc Register (RegisterReq) returns (common.Empty);
   // 用户注册
