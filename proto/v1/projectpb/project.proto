@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package project;
+option go_package = "rpc/projectpb";
+
+import "commonpb/common.proto";
+
+service ProjectService {
+  // 根据项目id获取项目信息
+  rpc GetProjectByID (GetProjectByIDReq) returns (GetProjectByIDRep);
+  // 根据用户id获取项目列表
+  rpc GetProjectByUID (GetProjectByUIDReq) returns (GetProjectByUIDRep);
+
+  // 创建项目
+  rpc CreateProject (CreateProjectReq) returns (common.Empty);
+  // 更新项目信息
+  rpc UpdateProjectByID (UpdateProjectByIDReq) returns (common.Empty);
+  // 删除项目
+  rpc DeleteProjectByID (DeleteProjectByIDReq) returns (common.Empty);
+}
+
+message DeleteProjectByIDReq {
+  int64 id = 1;
+}
+
+message UpdateProjectByIDReq {
+  int64 id = 1;
+  string name = 2;
+  string desc = 3;
+}
+
+message GetProjectByUIDReq {
+  int64 uid = 1;
+  int64 pageNo = 2;
+  int64 pageSize = 3;
+}
+message GetProjectByUIDRep {
+  repeated ProjectInfo list = 1;
+  int64 total = 2;
+}
+
+message GetProjectByIDReq {
+  int64 id = 1;
+}
+message GetProjectByIDRep {
+  int64 id = 1;
+  int64 uid = 2;
+  string name = 3;
+  string desc = 4;
+  int64 createdTime = 5;
+  int64 updatedTime = 6;
+}
+message ProjectInfo {
+  int64 id = 1;
+  int64 uid = 2;
+  string name = 3;
+  string desc = 4;
+  int64 createdTime = 5;
+  int64 updatedTime = 6;
+}
+
+message CreateProjectReq {
+  int64 uid = 1;
+  string name = 2;
+  string desc = 3;
+}

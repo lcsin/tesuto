@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 package user;
-option go_package = "rpc/user;userpb";
+option go_package = "rpc/userpb";
 
 import "commonpb/common.proto";
 

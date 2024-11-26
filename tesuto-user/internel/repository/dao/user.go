@@ -52,7 +52,7 @@ func (u *UserDAO) UpdateUserInfo(ctx context.Context, user model.User) error {
 	return u.db.Where("id = ?", user.ID).Updates(map[string]interface{}{
 		"email":      user.Email,
 		"username":   user.Username,
-		"updated_at": user.UpdatedAt,
+		"updated_at": user.UpdatedTime,
 	}).Error
 }
 

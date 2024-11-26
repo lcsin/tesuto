@@ -29,6 +29,7 @@ var (
 	ErrUserNotExists          = errors.New("用户不存在")
 	ErrEmailAlreadyRegistered = errors.New("邮箱已被注册")
 	ErrPasswdIncorrect        = errors.New("密码错误")
+	ErrPasswdInconsistency    = errors.New("密码不一致")
 )
 
 type UserService struct {
@@ -40,6 +41,10 @@ func NewUserService(repo repository.IUserRepository) IUserService {
 }
 
 func (u *UserService) Register(ctx context.Context, email, passwd, confirmPasswd string) error {
+	if passwd != confirmPasswd {
+		return ErrPasswdInconsistency
+	}
+
 	// 根据邮箱找到用户，说明该邮箱已被注册
 	_, err := u.repo.GetUserByEmail(ctx, email)
 	if err == nil {
@@ -53,10 +58,10 @@ func (u *UserService) Register(ctx context.Context, email, passwd, confirmPasswd
 	}
 
 	return u.repo.AddUser(ctx, model.User{
-		Email:     email,
-		Passwd:    string(hash),
-		CreatedAt: time.Now(),
-		UpdatedAt: time.Now(),
+		Email:       email,
+		Passwd:      string(hash),
+		CreatedTime: time.Now(),
+		UpdatedTime: time.Now(),
 	})
 }
 
@@ -86,11 +91,11 @@ func (u *UserService) UpdateUserInfo(ctx context.Context, user domain.User) erro
 	}
 
 	return u.repo.UpdateUserInfo(ctx, model.User{
-		ID:        user.ID,
-		Email:     user.Email,
-		Username:  user.Username,
-		UpdatedAt: time.Now(),
-		UpdatedBy: user.Username,
+		ID:          user.ID,
+		Email:       user.Email,
+		Username:    user.Username,
+		UpdatedTime: time.Now(),
+		UpdatedBy:   user.Username,
 	})
 }
 
