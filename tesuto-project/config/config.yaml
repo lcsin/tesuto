@@ -1,0 +1,8 @@
+app:
+  name: "tesuto-project"
+  server:
+    port: 8082
+mysql:
+  dns: "root:root@tcp(192.168.193.240:3306)/tesuto?charset=utf8mb4&parseTime=True&loc=Local"
+
+
