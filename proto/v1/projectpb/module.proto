@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package project;
+option go_package = "rpc/projectpb";
+
+import "commonpb/common.proto";
+
+service ModuleService {
+  // 根据模块ID获取项目信息
+  rpc GetModuleByID (GetModuleByIDReq) returns (GetModuleByIDRep);
+  // 根据项目ID获取模块列表
+  rpc GetModulesByProjectID (GetModulesByProjectIDReq) returns (GetModulesByProjectIDRep);
+
+  // 创建模块
+  rpc CreateModule (CreateModuleReq) returns (common.Empty);
+  // 更新模块信息
+  rpc UpdateModuleByID (UpdateModuleByIDReq) returns (common.Empty);
+  // 删除模块信息
+  rpc DeleteModuleByID (DeleteModuleByIDReq) returns (common.Empty);
+}
+
+message DeleteModuleByIDReq {
+  int64 id = 1;
+  int64 uid = 2;
+}
+
+message UpdateModuleByIDReq {
+  int64 id = 1;
+  int64 uid = 2;
+  string name = 3;
+  string desc = 4;
+}
+
+message CreateModuleReq {
+  int64 uid = 1;
+  int64 projectId = 2;
+  string name = 3;
+  string desc = 4;
+}
+
+message GetModulesByProjectIDReq {
+  int64 uid = 1;
+  int64 projectId = 2;
+}
+message GetModulesByProjectIDRep {
+  repeated ModuleInfo list = 1;
+}
+
+message GetModuleByIDReq {
+  int64 id = 1;
+  int64 uid = 2;
+}
+message GetModuleByIDRep {
+  int64 id = 1;
+  int64 uid = 2;
+  int64 projectId = 3;
+  string name = 4;
+  string desc = 5;
+  int64 createdTime = 6;
+  int64 updatedTime = 7;
+}
+message ModuleInfo {
+  int64 id = 1;
+  int64 uid = 2;
+  int64 projectId = 3;
+  string name = 4;
+  string desc = 5;
+  int64 createdTime = 6;
+  int64 updatedTime = 7;
+}

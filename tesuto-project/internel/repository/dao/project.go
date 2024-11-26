@@ -8,12 +8,12 @@ import (
 )
 
 type IProjectDAO interface {
-	SelectProjectByID(ctx context.Context, id int64) (*model.Project, error)
+	SelectProjectByID(ctx context.Context, id, uid int64) (*model.Project, error)
 	SelectProjectsByUID(ctx context.Context, uid int64, pageNo, pageSize int64) ([]*model.Project, int64, error)
 
 	InsertProject(ctx context.Context, project model.Project) error
 	UpdateProjectByID(ctx context.Context, project model.Project) error
-	DeleteProjectByID(ctx context.Context, id int64) error
+	DeleteProjectByID(ctx context.Context, id, uid int64) error
 }
 
 type ProjectDAO struct {
@@ -24,9 +24,9 @@ func NewProjectDAO(db *gorm.DB) IProjectDAO {
 	return &ProjectDAO{db: db}
 }
 
-func (p *ProjectDAO) SelectProjectByID(ctx context.Context, id int64) (*model.Project, error) {
+func (p *ProjectDAO) SelectProjectByID(ctx context.Context, id, uid int64) (*model.Project, error) {
 	var project model.Project
-	if err := p.db.Where("id = ?", id).First(&project).Error; err != nil {
+	if err := p.db.Where("id = ? and uid = ?", id, uid).First(&project).Error; err != nil {
 		return nil, err
 	}
 	return &project, nil
@@ -51,13 +51,13 @@ func (p *ProjectDAO) InsertProject(ctx context.Context, project model.Project) e
 }
 
 func (p *ProjectDAO) UpdateProjectByID(ctx context.Context, project model.Project) error {
-	return p.db.Where("id = ?", project.ID).UpdateColumns(map[string]any{
+	return p.db.Where("id = ? and uid = ?", project.ID, project.UID).UpdateColumns(map[string]any{
 		"name":         project.Name,
 		"desc":         project.Desc,
 		"updated_time": project.UpdatedTime,
 	}).Error
 }
 
-func (p *ProjectDAO) DeleteProjectByID(ctx context.Context, id int64) error {
-	return p.db.Where("id = ?", id).Delete(&model.Project{}).Error
+func (p *ProjectDAO) DeleteProjectByID(ctx context.Context, id, uid int64) error {
+	return p.db.Where("id = ? and uid = ?", id, uid).Delete(&model.Project{}).Error
 }

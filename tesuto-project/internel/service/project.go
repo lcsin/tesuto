@@ -13,12 +13,12 @@ import (
 )
 
 type IProjectService interface {
-	GetProjectByID(ctx context.Context, id int64) (*domain.Project, error)
+	GetProjectByID(ctx context.Context, id, uid int64) (*domain.Project, error)
 	GetProjectsByUID(ctx context.Context, uid int64, pageNo, pageSize int64) ([]*domain.Project, int64, error)
 
 	CreateProject(ctx context.Context, project domain.Project) error
-	UpdateProjectByID(ctx context.Context, id int64, name, desc string) error
-	DeleteProjectByID(ctx context.Context, id int64) error
+	UpdateProjectByID(ctx context.Context, id, uid int64, name, desc string) error
+	DeleteProjectByID(ctx context.Context, id, uid int64) error
 }
 
 var (
@@ -33,8 +33,8 @@ func NewProjectService(repo repository.IProjectRepository) IProjectService {
 	return &ProjectService{repo: repo}
 }
 
-func (p *ProjectService) GetProjectByID(ctx context.Context, id int64) (*domain.Project, error) {
-	project, err := p.repo.GetProjectByID(ctx, id)
+func (p *ProjectService) GetProjectByID(ctx context.Context, id, uid int64) (*domain.Project, error) {
+	project, err := p.repo.GetProjectByID(ctx, id, uid)
 	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrProjectNotFound
@@ -71,24 +71,34 @@ func (p *ProjectService) GetProjectsByUID(ctx context.Context, uid int64, pageNo
 }
 
 func (p *ProjectService) CreateProject(ctx context.Context, project domain.Project) error {
-	return p.repo.AddProject(ctx, model.Project{
+	if err := p.repo.AddProject(ctx, model.Project{
 		UID:         project.UID,
 		Name:        project.Name,
 		Desc:        project.Desc,
 		CreatedTime: time.Now(),
 		UpdatedTime: time.Now(),
-	})
+	}); err != nil {
+		return errcode.ErrInternalServer
+	}
+	return nil
 }
 
-func (p *ProjectService) UpdateProjectByID(ctx context.Context, id int64, name, desc string) error {
-	return p.repo.UpdateProjectByID(ctx, model.Project{
+func (p *ProjectService) UpdateProjectByID(ctx context.Context, id, uid int64, name, desc string) error {
+	if err := p.repo.UpdateProjectByID(ctx, model.Project{
 		ID:          id,
+		UID:         uid,
 		Name:        name,
 		Desc:        desc,
 		UpdatedTime: time.Now(),
-	})
+	}); err != nil {
+		return errcode.ErrInternalServer
+	}
+	return nil
 }
 
-func (p *ProjectService) DeleteProjectByID(ctx context.Context, id int64) error {
-	return p.repo.DeleteProjectByID(ctx, id)
+func (p *ProjectService) DeleteProjectByID(ctx context.Context, id, uid int64) error {
+	if err := p.repo.DeleteProjectByID(ctx, id, uid); err != nil {
+		return errcode.ErrInternalServer
+	}
+	return nil
 }

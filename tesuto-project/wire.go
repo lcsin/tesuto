@@ -23,9 +23,17 @@ var projectSvcProvider = wire.NewSet(
 	rpc.NewProjectServer,
 )
 
+var moduleSvcProvider = wire.NewSet(
+	dao.NewModuleDAO,
+	repository.NewModuleRepository,
+	service.NewModuleService,
+	rpc.NewModuleServer,
+)
+
 func InitApp() *App {
 	wire.Build(
 		projectSvcProvider,
+		moduleSvcProvider,
 		iocSet,
 		wire.Struct(new(App), "*"),
 	)

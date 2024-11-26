@@ -27,7 +27,7 @@ func (p *ProjectServer) GetProjectByID(ctx context.Context, req *projectpb.GetPr
 		return nil, errcode.ErrInvalidParams
 	}
 
-	resp, err := p.svc.GetProjectByID(ctx, req.Id)
+	resp, err := p.svc.GetProjectByID(ctx, req.Id, req.Uid)
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func (p *ProjectServer) UpdateProjectByID(ctx context.Context, req *projectpb.Up
 		return nil, errcode.ErrInvalidParams
 	}
 
-	if err := p.svc.UpdateProjectByID(ctx, req.Id, req.Name, req.Desc); err != nil {
+	if err := p.svc.UpdateProjectByID(ctx, req.Id, req.Uid, req.Name, req.Desc); err != nil {
 		return nil, err
 	}
 	return &commonpb.Empty{}, nil
@@ -98,7 +98,7 @@ func (p *ProjectServer) DeleteProjectByID(ctx context.Context, req *projectpb.De
 		return nil, errcode.ErrInvalidParams
 	}
 
-	if err := p.svc.DeleteProjectByID(ctx, req.Id); err != nil {
+	if err := p.svc.DeleteProjectByID(ctx, req.Id, req.Uid); err != nil {
 		return nil, err
 	}
 

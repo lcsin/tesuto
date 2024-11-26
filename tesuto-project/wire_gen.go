@@ -23,7 +23,11 @@ func InitApp() *App {
 	iProjectRepository := repository.NewProjectRepository(iProjectDAO)
 	iProjectService := service.NewProjectService(iProjectRepository)
 	projectServer := rpc.NewProjectServer(iProjectService)
-	server := ioc.InitGRPCXServer(projectServer)
+	iModuleDAO := dao.NewModuleDAO(db)
+	iModuleRepository := repository.NewModuleRepository(iModuleDAO)
+	iModuleService := service.NewModuleService(iModuleRepository)
+	moduleServer := rpc.NewModuleServer(iModuleService)
+	server := ioc.InitGRPCXServer(projectServer, moduleServer)
 	app := &App{
 		server: server,
 	}
@@ -35,3 +39,5 @@ func InitApp() *App {
 var iocSet = wire.NewSet(ioc.InitMySQL, ioc.InitGRPCXServer)
 
 var projectSvcProvider = wire.NewSet(dao.NewProjectDAO, repository.NewProjectRepository, service.NewProjectService, rpc.NewProjectServer)
+
+var moduleSvcProvider = wire.NewSet(dao.NewModuleDAO, repository.NewModuleRepository, service.NewModuleService, rpc.NewModuleServer)

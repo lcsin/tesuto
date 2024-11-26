@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-func InitGRPCXServer(projectServer *rpc.ProjectServer) *grpcx.Server {
+func InitGRPCXServer(projectServer *rpc.ProjectServer, moduleServer *rpc.ModuleServer) *grpcx.Server {
 	type Config struct {
 		port int `yaml:"port"`
 	}
@@ -19,6 +19,7 @@ func InitGRPCXServer(projectServer *rpc.ProjectServer) *grpcx.Server {
 
 	server := grpc.NewServer()
 	projectServer.RegisterServer(server)
+	moduleServer.RegisterServer(server)
 
 	return &grpcx.Server{
 		Server: server,

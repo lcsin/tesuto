@@ -21,12 +21,14 @@ service ProjectService {
 
 message DeleteProjectByIDReq {
   int64 id = 1;
+  int64 uid = 2;
 }
 
 message UpdateProjectByIDReq {
   int64 id = 1;
   string name = 2;
   string desc = 3;
+  int64 uid = 4;
 }
 
 message GetProjectByUIDReq {
@@ -41,6 +43,7 @@ message GetProjectByUIDRep {
 
 message GetProjectByIDReq {
   int64 id = 1;
+  int64 uid = 2;
 }
 message GetProjectByIDRep {
   int64 id = 1;
